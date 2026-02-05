@@ -1,0 +1,164 @@
+.login_root {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.login_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  background: radial-gradient(circle at center, #331e61 0%, var(--bg-dark) 100%);
+}
+
+.login_card {
+  background: var(--bg-surface);
+  border: 1px solid #ffffff0d;
+  padding: 40px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 40px #00000066;
+  backdrop-filter: blur(10px);
+}
+
+.login_header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login_logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary-purple);
+  margin-bottom: 10px;
+}
+
+.login_header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.login_header p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.login_form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input_group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input_group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.input_group input {
+  background: #ffffff08;
+  border: 1px solid #ffffff1a;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+}
+
+.input_group input:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  background: #8b5cf60d;
+  box-shadow: 0 0 10px #8b5cf633;
+}
+
+/*
+  fix for user agent stylesheet from messing
+  up the background color.
+  google just can't stop with its autofill override
+*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+  transition:
+    background-color calc(infinity * 1s) step-end,
+    color calc(infinity * 1s) step-end;
+}
+
+.login_btn {
+  background: var(--primary-purple);
+  color: white;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.login_btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px var(--primary-glow);
+  filter: brightness(1.02);
+}
+
+.login_footer {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.sign_up_link {
+  color: var(--primary-purple);
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 6px;
+  display: inline;
+}
+
+.sign_up_link:hover {
+  color: snow;
+  text-decoration: underline;
+}
+
+.back_home {
+  margin-top: 40px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.back_home:hover {
+  color: snow;
+  text-decoration: underline;
+}
+
+.password_group {
+  position: relative;
+  display: inline-flex;
+}
+
+.password_group input {
+  width: 100%;
+}
+
+.password_group div {
+  position: absolute;
+  top: 21.6%;
+  right: 4%;
+}
+
+.passwd_btn {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}

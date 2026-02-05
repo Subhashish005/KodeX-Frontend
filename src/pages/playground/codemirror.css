@@ -1,0 +1,25 @@
+.cm-editor {
+  background-color: #0d021b;
+}
+
+.cm-gutter {
+  background-color: #120229;
+}
+
+.cm-scroller {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #8d6db430;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #5e487888;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #5e4878e8;
+  }
+}

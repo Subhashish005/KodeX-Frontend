@@ -1,0 +1,20 @@
+.gutter {
+  background-color: var(--primary-purple);
+  z-index: 10;
+}
+
+.gutter.gutter-horizontal {
+  cursor: ew-resize;
+
+  &:hover {
+    background-color: var(--accent-cyan);
+  }
+}
+
+.gutter.gutter-vertical {
+  cursor: ns-resize;
+
+  &:hover {
+    background-color: var(--accent-cyan);
+  }
+}

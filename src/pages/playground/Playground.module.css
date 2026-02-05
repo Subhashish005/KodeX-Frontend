@@ -1,0 +1,244 @@
+.playground_root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.header_root {
+  background-color: var(--bg-purple-light);
+  height: 45px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #450056;
+}
+
+.header_content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.header_title {
+  color: #cccccc;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.app_root {
+  display: flex;
+  flex-grow: 1;
+  background-color: #120d1f;
+  overflow: hidden;
+}
+
+.activity_bar_root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--bg-purple-light);
+  width: 48px;
+  border-right: 1px solid #450056;
+}
+
+.top_btn_grp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 12px;
+  gap: 8px;
+  width: 100%;
+}
+
+.project_btn {
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #cccccc;
+}
+
+.project_btn:hover {
+  background-color: var(--primary-glow);
+  border: 1px solid var(--accent-cyan);
+  color: #ffffff;
+}
+
+.project_btn.active {
+  background-color: var(--primary-glow);
+  color: #ffffff;
+}
+
+.project_btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.workspace_root {
+  display: flex !important;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.sidebar_root {
+  display: flex;
+  background-color: var(--bg-surface);
+  overflow: hidden;
+}
+
+.sidebar_content {
+  padding: 16px;
+  width: 100%;
+}
+
+.sidebar_title {
+  color: #bbbbbb;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.workspace_main_root {
+  display: flex !important;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.editor_root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editor_toolbar {
+  background-color: var(--bg-surface);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #450056;
+}
+
+.toolbar_tabs {
+  display: flex;
+  gap: 1px;
+  height: 100%;
+  margin-left: 18px;
+}
+
+.tab {
+  background-color: transparent;
+  border: none;
+  color: #cccccc;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 16px;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.terminal_selected_tab {
+  background-color: var(--primary-glow);
+  color: #ffffff;
+  border-bottom-color: #007acc;
+}
+
+.editor_selected_tab {
+  position: relative;
+  background-color: transparent;
+
+  &::after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    margin-top: 5px;
+    margin-bottom: -2px;
+    border: 1px solid #450056;
+    border-bottom: 1px solid var(--bg-surface);
+    border-radius: 8px 8px 0 0;
+  }
+}
+
+.editor_container {
+  height: calc(100% - 40px);
+  overflow: hidden;
+}
+
+.editor_pane {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.terminal_root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-top: 1px solid #333;
+}
+
+.terminal_toolbar {
+  background-color: var(--bg-surface);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid #450056;
+}
+
+.terminal_tabs {
+  display: flex;
+  gap: 1px;
+  height: 100%;
+}
+
+.terminal_actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action_btn {
+  background-color: #2a2d2e;
+  border: none;
+  color: #cccccc;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.action_btn:hover {
+  background-color: #37373d;
+  color: #ffffff;
+}
+
+.terminal_container {
+  height: calc(100% - 40px);
+  width: 100%;
+  position: relative;
+}
