@@ -1,5 +1,5 @@
 import { useAuth } from "./useAuth";
-import { axiosPublic } from "./getService";
+import { axiosPublic } from "./getAxiosInstance.js";
 
 export const useRefreshToken = () => {
   const { setAuth } = useAuth();
