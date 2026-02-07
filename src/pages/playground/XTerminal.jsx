@@ -4,6 +4,7 @@ import { useEffect, useRef, useImperativeHandle } from "react";
 
 import "@xterm/xterm/css/xterm.css";
 import "./xterm.css";
+import { useAuth } from "../../utils/useAuth.js";
 
 // not using forwardRef intentionally
 export const XTerminal = ({termRef}) => {
@@ -14,6 +15,8 @@ export const XTerminal = ({termRef}) => {
   const socketRef             = useRef(null);
   const handleWindowResizeRef = useRef(null);
   const lastCalledTime        = useRef(null);
+
+  const { auth } = useAuth();
 
   // again doing some dangerous stuff
   // of course avoid this
@@ -77,6 +80,16 @@ export const XTerminal = ({termRef}) => {
       // wdym? this is production ready code ofc
       await new Promise(r => setTimeout(r, 100));
 
+      // send the access token as the first message to authenticate user
+      if(socket.readyState === WebSocket.OPEN) {
+        socket.send(
+          JSON.stringify({
+            type: "auth",
+            access_token: auth.accessToken,
+          })
+        );
+      }
+
       fitAddonRef.current = new FitAddon();
       terminalRef.current = term;
       socketRef.current = socket;
@@ -108,7 +121,7 @@ export const XTerminal = ({termRef}) => {
         const cols = term.cols;
         const rows = term.rows;
 
-        if(socket.readyState === socket.OPEN) {
+        if(socket.readyState === WebSocket.OPEN) {
           socket.send(JSON.stringify({
             type: "resize",
             cols,
@@ -141,11 +154,10 @@ export const XTerminal = ({termRef}) => {
         }
       });
 
-      socket.onmessage = (event) => {
-        if(event.data instanceof ArrayBuffer) {
-          term.write(new Uint8Array(event.data));
-        } else {
-          term.write(event.data);
+      socket.onmessage = async (event) => {
+        if(event.data instanceof Blob) {
+          const text = await event.data.text();
+          term.write(text);
         }
       };
     }

@@ -103,7 +103,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  margin: 0 10px;
+  margin: 0 4px 0 8px;
   max-width: 120px;
 }
 
@@ -113,6 +113,6 @@
 }
 
 .user_img {
-  height: 28px;
-  width: 28px;
+  height: 26px;
+  width: 26px;
 }
