@@ -23,7 +23,7 @@ export const useAxiosPrivate = () => {
       async (error) => {
         const prevRequest = error?.config;
 
-        if(error?.reponse?.status === 403 && !prevRequest.retried) {
+        if(error?.status === 401 && !prevRequest.retried) {
           prevRequest.retried = true;
 
           const newAccessToken = await refresh();

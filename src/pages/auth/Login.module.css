@@ -80,20 +80,6 @@
   box-shadow: 0 0 10px #8b5cf633;
 }
 
-/*
-  fix for user agent stylesheet from messing
-  up the background color.
-  google just can't stop with its autofill override
-*/
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active  {
-  transition:
-    background-color calc(infinity * 1s) step-end,
-    color calc(infinity * 1s) step-end;
-}
-
 .login_btn {
   background: var(--primary-purple);
   color: white;

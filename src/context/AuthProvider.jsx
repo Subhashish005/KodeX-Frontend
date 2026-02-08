@@ -1,29 +1,40 @@
 import { createContext, useLayoutEffect, useState } from "react";
-import { axiosPrivate } from "../utils/getAxiosInstance";
+import { axiosPublic } from "../utils/getAxiosInstance";
 import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({children}) => {
-  const [auth, setAuth] = useState({isLoggedIn: false});
+  const [auth, setAuth] = useState(
+    {
+      accessToken: null,
+      username: null,
+      isLoggedIn: false
+    }
+  );
 
   useLayoutEffect(() => {
     const init = async () => {
-      await axiosPrivate.get('/api/v1/auth/renew-access-token')
-        .then((response) => {
+      await axiosPublic(
+        '/api/v1/renew-access-token'
+      )
+      .then(response => {
+        if(response.status === 200) {
+          const accessToken = response.data?.access_token;
+          const username = jwtDecode(accessToken).sub;
 
-          const token = response.data?.access_token;
-          const username = jwtDecode(token).sub;
-
-          setAuth({
-            accessToken: token,
-            isLoggedIn: true,
-            username
+          setAuth(prev => {
+            return {
+              ...prev,
+              accessToken,
+              isLoggedIn: true,
+              username
+            };
           });
-        })
-        .catch((error) => {
-          console.error(error);
-        })
+        }})
+      .catch(error => {
+        console.error('error at refreshing token: ' + error);
+      });
     }
 
     init();

@@ -107,7 +107,10 @@ export function SignUp() {
     if(!validateUserInput()) return;
 
     // handle backend submission
-    await axiosPublic.post(formData)
+    await axiosPublic.post(
+      '/api/v1/auth/signup',
+      formData
+    )
       .then((response) => {
         if(response.status === 200) {
           customSuccessPopup("Signed up successfully! please Login", 1000);
@@ -115,6 +118,8 @@ export function SignUp() {
         }
       })
       .catch((error) => {
+        console.log(error);
+
         if(!error.response) {
           customErrorPopup("server didn't respond! try sign up again after sometime", 2000);
 
