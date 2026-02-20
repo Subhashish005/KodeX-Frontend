@@ -29,12 +29,15 @@
   background-clip: text;
 }
 
-.playground_btn {
+.projects_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   height: 65px;
   width: 220px;
-  font-size: 1rem;
+  font-size: 20px;
   font-weight: bold;
-  border: none;
   border-radius: 50px;
   background-color: #13e01ebc;
   color: var(--primary-btn-text);
@@ -43,7 +46,17 @@
   background: linear-gradient(90deg, #1c4e0fe6 0%, #13e01ebc 100%);
 }
 
-.playground_btn:hover {
+.projects_btn:hover {
   transform: translateY(-2px) scale(1.05, 1.05);
   box-shadow: 0 0 25px 8px #259509e6;
+}
+
+.projects_btn_text {
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+.projects_btn_icon {
+  font-size: 1.5em;
+  height: 30px;
 }

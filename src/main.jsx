@@ -18,6 +18,7 @@ createRoot(document.getElementById('root')).render(
       <ToastContainer
         transition={Slide}
         newestOnTop={true}
+        position={'top-center'}
       />
     </AuthProvider>
   </BrowserRouter>,

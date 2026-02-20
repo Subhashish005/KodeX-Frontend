@@ -1,0 +1,30 @@
+.create_new_project {
+  display: flex;
+
+  border: dashed 2px #9a81ff;
+  border-radius: 16px;
+  cursor: pointer;
+  height: 250px;
+  width: 300px;
+  overflow: hidden;
+
+  &:hover {
+    border: dashed 2px #b6a4ff;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg);}
+  to { transform: rotate(180deg);}
+}
+
+.create_new_project > ion-icon {
+  height: 100%;
+  width: 100%;
+  color: #9a81ff;
+
+  &:hover {
+    animation: spin 0.65s ease-in-out;
+    color: #b6a4ff;
+  }
+}

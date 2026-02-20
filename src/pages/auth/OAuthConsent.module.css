@@ -1,0 +1,110 @@
+
+.main_root {
+  height: 100%;
+  font-size: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  background: linear-gradient(180deg, #180340 0%, var(--bg-dark) 100%);
+}
+
+.disclaimer {
+  display: flex;
+  flex-direction: column;
+
+  color: rgb(241, 241, 241);
+  height: 60%;
+  max-height: 60%;
+  overflow-y: scroll;
+  gap: 10px;
+  padding: 10px;
+  background: transparent;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(0deg, rgba(78, 53, 112, 0.766) 0%, rgba(72, 42, 119, 0.732) 100%);
+    border-radius: 10px;
+  }
+
+  & > h1 {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+  }
+
+  & > h2 {
+    font-size: 0.55em;
+  }
+
+  & > h3 {
+    font-size: 0.35em;
+  }
+
+  & > p, div {
+    font-style: oblique;
+    font-size: 0.35em;
+  }
+
+  li {
+    font-size: 0.35em;
+    font-style: oblique;
+    margin-left: 10px;
+  }
+}
+
+.scroll_down_btn {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  bottom: 27%;
+  left: 50%;
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  border: 2px solid rgba(255, 255, 255, 0.622);
+  font-size: 30px;
+  color: rgba(255, 255, 255, 0.69);
+}
+
+.note {
+  text-align: center;
+  font-size: 16px;
+  font-style: oblique;
+  margin-top: 50px;
+}
+
+.login_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.login_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 65px;
+  width: 220px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 50px;
+  background-color: #13e01ebc;
+  color: var(--primary-btn-text);
+  transition: 0.2s;
+  margin-top: 40px;
+  background: linear-gradient(90deg, #1c4e0fe6 0%, #13e01ebc 100%);
+}
+
+.login_btn:hover {
+  transform: translateY(-2px) scale(1.05, 1.05);
+  box-shadow: 0 0 25px 8px #259509e6;
+}

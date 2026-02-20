@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router';
 import { Footer } from '../../components/Footer';
 import { customErrorPopup, customSuccessPopup } from '../../utils/customPopup.js';
 import { Header } from '../../components/Header.jsx';
-import { axiosPublic } from '../../utils/getAxiosInstance.js';
+import { axiosPublicInstance } from '../../utils/getAxiosInstance.js';
 
 import styles from './Login.module.css';
 import { useAuth } from '../../utils/useAuth.js';
+import { jwtDecode } from 'jwt-decode';
 
 export function Login() {
   const navigate = useNavigate();
@@ -17,13 +18,10 @@ export function Login() {
   const [passwordToggleImg, setPasswordToggleImg] = useState('src/assets/eye-slash.png');
 
   useEffect(() => {
-    const usernameInput = document.querySelector('#username');
-
-    // TODO: need some kind of session to make sure a logged in user
-    // can't login again after hit login url
-    // REASON: doing so makes react reload everything and access token is lost
+    // TODO: put a loading spinner here sometime
     if(auth.isLoggedIn) navigate('/', {replace: true});
 
+    const usernameInput = document.querySelector('#username');
     usernameInput.focus();
   }, []);
 
@@ -70,19 +68,25 @@ export function Login() {
 
     if(!validateUserInput()) return;
 
-
-    await axiosPublic.post(
+    await axiosPublicInstance.post(
       '/api/v1/auth/login',
       formData
     )
       .then((response) => {
         if(response.status === 200) {
+          const accessToken = response.data?.access_token;
+          const decodeToken = jwtDecode(accessToken);
+          const username = decodeToken.name;
+          const userId = decodeToken.sub;
+
+
           setAuth((prev) => {
             return {
               ...prev,
-              accessToken: response.data?.access_token,
+              accessToken,
               isLoggedIn: true,
-              username: formData.username
+              username,
+              userId
             };
           });
 
@@ -182,7 +186,7 @@ export function Login() {
             </form>
 
             <div className={styles.login_footer}>
-              <span>Don't have an account yet? </span>
+              <span>Don't have an account yet?</span>
               <div
                 className={styles.sign_up_link}
                 onClick={() => {

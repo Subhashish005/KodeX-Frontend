@@ -149,6 +149,10 @@
   align-items: center;
   border-bottom: 2px solid transparent;
   transition: all 0.2s;
+
+  &:hover {
+    background-color: rgba(235, 181, 255, 0.15);
+  }
 }
 
 .terminal_selected_tab {
@@ -159,22 +163,8 @@
 
 .editor_selected_tab {
   position: relative;
-  background-color: transparent;
-
-  &::after {
-    position: absolute;
-    content: '';
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    margin-top: 5px;
-    margin-bottom: -2px;
-    border: 1px solid #450056;
-    border-bottom: 1px solid var(--bg-surface);
-    border-radius: 8px 8px 0 0;
-  }
+  background-color: var(--primary-glow);
+  border-bottom-color: #007acc;
 }
 
 .editor_container {

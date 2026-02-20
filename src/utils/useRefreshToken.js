@@ -1,4 +1,4 @@
-import { axiosPublic } from "./getAxiosInstance.js";
+import { axiosPublicInstance } from "./getAxiosInstance.js";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "./useAuth.js";
 
@@ -7,12 +7,13 @@ export const useRefreshToken = () => {
   let accessToken = null;
 
   const refresh = async () => {
-    await axiosPublic(
+    await axiosPublicInstance(
       '/api/v1/renew-access-token'
-    ).then(response => {
+    )
+    .then(response => {
       if(response.status === 200) {
         accessToken = response.data?.access_token;
-        const username = jwtDecode(accessToken).sub;
+        const username = jwtDecode(accessToken).name;
 
         setAuth(prev => {
           return {
@@ -23,9 +24,8 @@ export const useRefreshToken = () => {
           };
         });
       }
-    }).catch(error => {
-      console.error('error at refreshing token: ' + error);
-    });
+    })
+    .catch(error => console.error('error at refreshing token: ' + error));
 
     return accessToken;
   }

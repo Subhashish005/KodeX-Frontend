@@ -75,7 +75,7 @@ export function Playground() {
         <div className={styles.activity_bar_root}>
           <div className={styles.top_btn_grp}>
             <button
-              className={`${styles.project_btn} ${isProjectOpen ? styles.active : ""}`}
+              className={`${styles.project_btn} ${isProjectOpen && styles.active}`}
               onClick={handleProjectToggle}
               title={isProjectOpen ? "Hide project" : "Show project"}
             >
@@ -140,8 +140,14 @@ export function Playground() {
                   <button className={`${styles.tab} ${styles.editor_selected_tab}`}>
                     index.js
                   </button>
-                  <button className={styles.tab}>App.jsx</button>
-                  <button className={styles.tab}>styles.css</button>
+
+                  <button className={styles.tab}>
+                    App.jsx
+                  </button>
+
+                  <button className={styles.tab}>
+                    styles.css
+                  </button>
                 </div>
               </div>
 

@@ -6,7 +6,7 @@ import { customErrorPopup, customSuccessPopup } from '../../utils/customPopup.js
 import { Header } from "../../components/Header.jsx";
 
 import styles from "./SignUp.module.css";
-import { axiosPublic } from "../../utils/getAxiosInstance.js";
+import { axiosPublicInstance } from "../../utils/getAxiosInstance.js";
 import { useAuth } from "../../utils/useAuth.js";
 
 export function SignUp() {
@@ -107,7 +107,7 @@ export function SignUp() {
     if(!validateUserInput()) return;
 
     // handle backend submission
-    await axiosPublic.post(
+    await axiosPublicInstance.post(
       '/api/v1/auth/signup',
       formData
     )

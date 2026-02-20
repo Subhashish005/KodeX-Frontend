@@ -1,0 +1,77 @@
+.project_card {
+  padding: 24px;
+  /* background: #e4e3ed; */
+  background: radial-gradient(#04475075, var(--bg-surface) 80%);
+  border-radius: 16px;
+  border: 2px solid #9a81ff;
+  box-shadow: 0 10px 25px #6c5ce71a;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.project_name {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  color: #6c25c8;
+  font-weight: 700;
+  max-height: 50px;
+  height: 50px;
+  line-height: 90%;
+  cursor: default;
+  word-wrap: break-word;
+}
+
+.project_desc {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+  gap: 8px;
+  border-top: 1px solid gray;
+}
+
+.desc_item {
+  font-size: 0.9rem;
+  color: #98a5aa;
+}
+
+.desc_item span {
+  font-weight: 600;
+  color: #a8b5b9;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin-right: 4px;
+}
+
+.btn_grp {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: inherit;
+  border: none;
+}
+
+.btn_delete {
+  background-color: #c0c0c0;
+  color: white;
+}
+
+.btn_delete:hover {
+  background-color: #ff7675;
+  color: white;
+}
+
+.btn_open {
+  background-color: #6c5ce7;
+  color: white;
+}
+
+.btn_open:hover {
+  background-color: #6c25c8;
+}

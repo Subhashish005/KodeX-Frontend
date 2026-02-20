@@ -11,10 +11,11 @@
   height: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1em;
+  padding: 0 16px;
   background: #2a1551dd;
   backdrop-filter: blur(12px);
   border-bottom: 1px solid #ffffff0d;
+  cursor: pointer;
 }
 
 .logo_container {
@@ -99,6 +100,7 @@
 }
 
 .username_text {
+  font-size: 16px;
   font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;

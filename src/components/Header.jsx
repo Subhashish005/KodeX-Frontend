@@ -35,6 +35,7 @@ const UserGroup = ({username}) => {
 }
 
 export const Header = ({dontShowCurrentGroup}) => {
+  const navigate = useNavigate();
   const { auth } = useAuth();
 
   let currentGroup = <AuthGroup />;
@@ -49,7 +50,12 @@ export const Header = ({dontShowCurrentGroup}) => {
   return (
     <header className={styles.header_root}>
       <div className={styles.header_container}>
-        <div className={styles.logo_container}>
+        <div
+          className={styles.logo_container}
+          onClick={() => {
+            navigate('/', {replace: true});
+          }}
+        >
           <span className={styles.logo_text}>KodeX</span>
         </div>
 

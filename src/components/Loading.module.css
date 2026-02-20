@@ -1,0 +1,18 @@
+.main_root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  background: linear-gradient(180deg, var(--primary-glow) 0%, var(--bg-dark) 100%);
+}
+
+.loading_spinner {
+	height: 200px;
+}
+
+.loading_text {
+  font-size: 30px;
+  font-weight: bold;
+}
