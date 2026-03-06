@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import Split from "react-split";
 import { Editor } from "./Editor";
 import { XTerminal } from "./XTerminal";
+import { useParams } from "react-router";
+import { Explorer } from "./Explorer.jsx";
+import { EditorActivityBar } from './EditorActivityBar.jsx';
+import { useAxiosPrivate } from '../../utils/useAxiosPrivate';
+import { customErrorPopup, customSuccessPopup } from '../../utils/customPopup.js';
 
 import styles from "./Playground.module.css";
 import "./gutter.css";
@@ -13,14 +18,136 @@ export function Playground() {
   const workspaceRootRef = useRef(null);
   const sidebarRef = useRef(null);
   const gutterRef = useRef(null);
+  const { project_id } = useParams();
+  const axiosPrivateInstance = useAxiosPrivate();
+  const [tabs, setTabs] = useState([]);
+  const [activeTabId, setActiveTabId] = useState(null);
 
-  const handleTerminalResize = () => {
-    if(termRef.current) termRef.current.fit();
+  const activeTab = tabs.find(t => t.id === activeTabId);
+
+  const updateTabContent = (newContent) => {
+    setTabs(prev => prev.map(
+      tab => tab.id === activeTabId
+        ? { ...tab, content: newContent, unsaved: true }
+        : tab
+    ));
+  }
+
+  const openFile = async (node) => {
+    const existing = tabs.find(t => t.id === node.id);
+    const parentId = node.parent.level === 0 ? null : node.parent.id;
+
+    if (existing) {
+      setActiveTabId(existing.id);
+
+      return;
+    }
+
+    await axiosPrivateInstance.get(
+      `/api/v1/projects/${project_id}/files/${node.data.name}?parent_id=${parentId}`
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          const content = res.data ? res.data : "";
+
+          const newTab = {
+            id: node.id,
+            name: node.data.name,
+            parentId: node.parent.id,
+            parentLevel: node.parent.level,
+            content: content,
+            unsaved: false
+          };
+
+          setTabs(prev => [...prev, newTab]);
+          setActiveTabId(newTab.id);
+        }
+      })
+      .catch((err) => {
+        customErrorPopup(`Error while fetching data for ${node.data.name}!`);
+
+        console.log(err);
+      })
+  }
+
+  const saveFile = async () => {
+    if(!activeTab) return;
+
+    const parentId = activeTab.parentLevel === 0 ? null : activeTab.parentId;
+
+    await axiosPrivateInstance.put(
+      `/api/v1/projects/${project_id}/files/${activeTab.name}?parent_id=${parentId}`,
+      activeTab.content,
+      {
+        headers: {
+          "Content-Type": "text/plain"
+        }
+      }
+    )
+      .then((res) => {
+        if(res.status === 200) {
+          setTabs(
+            prev => prev.map(
+              tab => tab.id === activeTabId
+                ? {...tab, unsaved: false}
+                : tab
+            )
+          );
+        }
+
+        customSuccessPopup(`${activeTab.name} saved successfully!`, 400);
+      })
+      .catch((err) => {
+        customErrorPopup(`Error while saving ${activeTab.name}!`);
+
+        console.log(err);
+      });
+  }
+
+  const closeTab = (id) => {
+    const tab = tabs.find(tab => tab.id === id);
+
+    if(tab.unsaved) {
+      const confirmClose = window.confirm(
+        `${tab.name} has unsaved changes. Close anyway?`
+      );
+
+      if(!confirmClose) return;
+    }
+
+    setTabs(prev => prev.filter(tab => tab.id !== id));
+
+    // if this tab was focused
+    // then check whether there are any tabs before or after it
+    // if yes then try to focus the before it otherwise after it
+    if(activeTabId === id) {
+      let index = 0;
+
+      for(let i = 0; i < tabs.length; ++i) {
+        if(activeTabId === tabs[i].id) {
+          index = i;
+
+          break;
+        }
+      }
+
+      if(index > 0) {
+        setActiveTabId(tabs[index - 1].id);
+      } else if(index < tabs.length) {
+        setActiveTabId(tabs[index + 1].id);
+      } else {
+        setActiveTabId(null);
+      }
+    }
+  }
+
+  const handleSplitDrag = () => {
+    if (termRef.current) termRef.current.fit();
   }
 
   // initial setup for removing/adding explorer sidebar
   useEffect(() => {
-    if(workspaceRootRef.current) {
+    if (workspaceRootRef.current) {
       const parent = workspaceRootRef.current.parent;
 
       sidebarRef.current = parent.children[0];
@@ -31,33 +158,38 @@ export function Playground() {
     // sure fit is called after the dom creation not
     // before it
     setTimeout(() => {
-      handleTerminalResize();
+      handleSplitDrag();
     }, 500);
   }, []);
 
   const handleProjectToggle = () => {
-    if(!workspaceRootRef.current) return;
+    if (!workspaceRootRef.current) return;
 
     const sidebar = sidebarRef.current;
     const gutter = gutterRef.current;
 
-    if(!sidebar || !gutter) return;
+    if (!sidebar || !gutter) return;
 
-    if(isProjectOpen) {
-      sidebar.setAttribute('style', 'display: none');
-
-      const newStyle =
-        gutter.getAttribute('class').concat(' hidden');
+    if (isProjectOpen) {
+      let newStyle = gutter.getAttribute('class').concat(' hidden');
 
       gutter.setAttribute('class', newStyle);
+
+      newStyle = sidebar.getAttribute('class').concat(' hidden');
+
+      sidebar.setAttribute('class', newStyle);
     } else {
-      sidebar.removeAttribute('style');
+      let oldStyle = gutter.getAttribute('class');
 
-      const oldStyle = gutter.getAttribute('class');
-
-      const newStyle = oldStyle.substring(0, oldStyle.lastIndexOf(' '));
+      let newStyle = oldStyle.substring(0, oldStyle.lastIndexOf(' '));
 
       gutter.setAttribute('class', newStyle);
+
+      oldStyle = sidebar.getAttribute('class');
+
+      newStyle = oldStyle.substring(0, oldStyle.lastIndexOf(' '));
+
+      sidebar.setAttribute('class', newStyle);
     }
 
     setIsProjectOpen(!isProjectOpen);
@@ -100,9 +232,12 @@ export function Playground() {
           just toggle the sidebar off.
           on second note might not be a good idea tbh
         */}
+        {/*
+          TODO: add debouncer or rate-limiter
+        */}
         <Split
           className={styles.workspace_root}
-          sizes={[15, 85]}
+          sizes={[20, 80]}
           minSize={100}
           expandToMin={false}
           gutterSize={4}
@@ -112,14 +247,15 @@ export function Playground() {
           direction="horizontal"
           cursor="ew-resize"
           ref={workspaceRootRef}
-          onDrag={handleTerminalResize}
+          onDrag={handleSplitDrag}
         >
           <div
             className={styles.sidebar_root}
           >
-            <div className={styles.sidebar_content}>
-              <h3 className={styles.sidebar_title}>Explorer</h3>
-            </div>
+            <Explorer
+              projectId={project_id}
+              openFile={openFile}
+            />
           </div>
           <Split
             className={styles.workspace_main_root}
@@ -132,28 +268,23 @@ export function Playground() {
             dragInterval={0.5}
             direction="vertical"
             cursor="ns-resize"
-            onDrag={handleTerminalResize}
+            onDrag={handleSplitDrag}
           >
             <div className={styles.editor_root}>
-              <div className={styles.editor_toolbar}>
-                <div className={styles.toolbar_tabs}>
-                  <button className={`${styles.tab} ${styles.editor_selected_tab}`}>
-                    index.js
-                  </button>
-
-                  <button className={styles.tab}>
-                    App.jsx
-                  </button>
-
-                  <button className={styles.tab}>
-                    styles.css
-                  </button>
-                </div>
-              </div>
+              <EditorActivityBar
+                tabs={tabs}
+                activeTabId={activeTabId}
+                setActiveTabId={setActiveTabId}
+                closeTab={closeTab}
+              />
 
               <div className={styles.editor_container}>
                 <div className={styles.editor_pane}>
-                  <Editor />
+                  <Editor
+                    tab={activeTab}
+                    updateTabContent={updateTabContent}
+                    saveFile={saveFile}
+                  />
                 </div>
               </div>
             </div>
@@ -168,7 +299,10 @@ export function Playground() {
               </div>
 
               <div className={styles.terminal_container}>
-                <XTerminal terminalRef={termRef} />
+                <XTerminal
+                  terminalRef={termRef}
+                  projectId={project_id}
+                />
               </div>
             </div>
           </Split>

@@ -23,10 +23,6 @@ export const ProjectsHome = () => {
     fetchAllProjects();
   }, []);
 
-  useEffect(() => {
-    console.log(projects);
-  }, [projects]);
-
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   }

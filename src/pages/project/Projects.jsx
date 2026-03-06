@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router";
 import { useAxiosPrivate } from "../../utils/useAxiosPrivate";
 import { ProjectCard } from "./ProjectCard";
 
 import styles from './Projects.module.css';
 
-const CreateProjectContainer = ({ openProjectDialog }) => {
+const CreateNewProjectContainer = ({ openProjectDialog }) => {
   return (
     <div
       className={styles.create_new_project}
@@ -15,20 +16,16 @@ const CreateProjectContainer = ({ openProjectDialog }) => {
   );
 }
 
-
-const openProject = () => {
-  console.log('implement me!');
-}
-
 export const Projects = ({ projects, setProjects, openProjectDialog }) => {
   const axiosPrivateInstance = useAxiosPrivate();
+  const navigate = useNavigate();
 
   const deleteProject = async (projectId) => {
     await axiosPrivateInstance.delete(
       `/api/v1/projects/${projectId}`
     )
       .then((response) => {
-        if (response.status === 202) {
+        if(response.status === 202) {
           setProjects((prev) => {
             const newValue = prev.filter((project) => project.id !== projectId);
 
@@ -39,6 +36,10 @@ export const Projects = ({ projects, setProjects, openProjectDialog }) => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  const openProject = async (projectId) => {
+    navigate(`${projectId}/playground`);
   }
 
   return [
@@ -54,7 +55,7 @@ export const Projects = ({ projects, setProjects, openProjectDialog }) => {
         deleteProject={deleteProject}
       />
     }),
-    <CreateProjectContainer
+    <CreateNewProjectContainer
       openProjectDialog={openProjectDialog}
       key={crypto.randomUUID}
     />

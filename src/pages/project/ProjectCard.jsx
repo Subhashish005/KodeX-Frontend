@@ -46,7 +46,10 @@ export const ProjectCard = ({
           Delete
         </button>
 
-        <button className={`${styles.btn} ${styles.btn_open}`}>
+        <button
+          className={`${styles.btn} ${styles.btn_open}`}
+          onClick={() => openProject(id)}
+        >
           Open Project
         </button>
       </div>

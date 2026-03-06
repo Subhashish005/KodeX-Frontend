@@ -9,7 +9,7 @@ import { OAuthConsent } from './pages/auth/OAuthConsent';
 import { RequiredAuth } from './components/RequiredAuth';
 import { RequiredOAuth } from './components/RequiredOAuth';
 
-// import { Test } from './Test';
+import { Test } from './Test';
 
 import './App.css';
 import { OAuhtSuccess } from './pages/auth/OAuhtSuccess';
@@ -33,14 +33,14 @@ function App() {
         <Route element={<RequiredOAuth />} >
           <Route path="/projects">
             <Route index element={<ProjectsHome />} />
-            <Route path=':pid/playground' element={<Playground />} />
+            <Route path=':project_id/playground' element={<Playground />} />
           </Route>
         </Route>
 
           <Route path='/disclaimer' element={<OAuthConsent />} />
       </Route>
 
-      {/* <Route path="/test" element={<Test />} /> */}
+      <Route path="/test" element={<Test />} />
 
       {/* catch any other routes */}
       <Route path='*' element={<Missing />} />

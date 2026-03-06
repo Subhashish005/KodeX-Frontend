@@ -1,0 +1,56 @@
+.editor_toolbar {
+  background-color: var(--bg-surface);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #450056;
+}
+
+.toolbar_tabs {
+  display: flex;
+  gap: 1px;
+  height: 100%;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+
+  border: none;
+  color: #cccccc;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 5px 0 12px;
+  height: 100%;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: rgba(235, 181, 255, 0.15);
+  }
+}
+
+.editor_selected_tab {
+  position: relative;
+  background-color: var(--primary-glow);
+  border-bottom-color: #007acc;
+}
+
+.close_btn {
+  height: 19px;
+  width: 19px;
+  border-radius: 5px;
+
+  & > svg > path {
+    transform: translate(50%, -18%) rotate(45deg);
+    stroke: #cccccc;
+
+  }
+
+  &:hover {
+    background-color: rgba(246, 221, 255, 0.19);
+  }
+}

@@ -7,7 +7,7 @@ import "./xterm.css";
 import { useAuth } from "../../utils/useAuth.js";
 
 // not using forwardRef intentionally
-export const XTerminal = ({termRef}) => {
+export const XTerminal = ({termRef, projectId}) => {
   const containerRef          = useRef(null);
   const terminalRef           = useRef(null);
   const fitAddonRef           = useRef(null);
@@ -81,11 +81,13 @@ export const XTerminal = ({termRef}) => {
       await new Promise(r => setTimeout(r, 100));
 
       // send the access token as the first message to authenticate user
+      // and send project_id to mount the local project dir on the contianer
       if(socket.readyState === WebSocket.OPEN) {
         socket.send(
           JSON.stringify({
             type: "auth",
             access_token: auth.accessToken,
+            project_id: projectId
           })
         );
       }

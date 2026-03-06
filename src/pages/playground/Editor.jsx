@@ -1,23 +1,31 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { cpp } from '@codemirror/lang-cpp';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
-import { useState } from 'react';
+import { keymap } from '@uiw/react-codemirror';
 
 import styles from './Editor.module.css';
 
-export const Editor = () => {
-  const [value, setValue] = useState(
-    `int main() {\n\tstd::cout << "hello, mortals.";\n\n\treturn 0;\n}`
-  );
+export const Editor = ({tab, updateTabContent, saveFile}) => {
+  if (!tab) return null;
+
+  const saveKeymap = keymap.of([
+    {
+      key: "Ctrl-s",
+      run: () => {
+        saveFile();
+
+        return true;
+      }
+    },
+  ]);
 
   return (
     <CodeMirror
-      value={value}
-      extensions={[cpp()]}
+      key={tab.id}
+      value={tab.content}
+      extensions={[cpp(), saveKeymap]}
       theme={tokyoNight}
-      onChange={(value) => {
-        setValue(value);
-      }}
+      onChange={(value) => updateTabContent(value)}
       className={styles.editor}
     />
   );
