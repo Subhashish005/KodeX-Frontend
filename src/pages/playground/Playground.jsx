@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Split from "react-split";
 import { Editor } from "./Editor";
 import { XTerminal } from "./XTerminal";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { Explorer } from "./Explorer.jsx";
 import { EditorActivityBar } from './EditorActivityBar.jsx';
 import { useAxiosPrivate } from '../../utils/useAxiosPrivate';
@@ -22,8 +22,28 @@ export function Playground() {
   const axiosPrivateInstance = useAxiosPrivate();
   const [tabs, setTabs] = useState([]);
   const [activeTabId, setActiveTabId] = useState(null);
+  const confirmationPopupRef = useRef(null);
 
   const activeTab = tabs.find(t => t.id === activeTabId);
+
+  useEffect(() => {
+    const handler = (e) => {
+      saveProject();
+
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handler);
+
+    return () => window.removeEventListener('beforeunload', handler);
+  }, []);
+
+  const saveProject = () => {
+    // hit backend api to save project somehow
+    // as the page/tab/browser might be closing
+    // and access token might expire
+  }
 
   const updateTabContent = (newContent) => {
     setTabs(prev => prev.map(
@@ -67,11 +87,11 @@ export function Playground() {
         customErrorPopup(`Error while fetching data for ${node.data.name}!`);
 
         console.log(err);
-      })
+      });
   }
 
   const saveFile = async () => {
-    if(!activeTab) return;
+    if (!activeTab) return;
 
     const parentId = activeTab.parentLevel === 0 ? null : activeTab.parentId;
 
@@ -85,11 +105,11 @@ export function Playground() {
       }
     )
       .then((res) => {
-        if(res.status === 200) {
+        if (res.status === 200) {
           setTabs(
             prev => prev.map(
               tab => tab.id === activeTabId
-                ? {...tab, unsaved: false}
+                ? { ...tab, unsaved: false }
                 : tab
             )
           );
@@ -107,12 +127,12 @@ export function Playground() {
   const closeTab = (id) => {
     const tab = tabs.find(tab => tab.id === id);
 
-    if(tab.unsaved) {
+    if (tab.unsaved) {
       const confirmClose = window.confirm(
         `${tab.name} has unsaved changes. Close anyway?`
       );
 
-      if(!confirmClose) return;
+      if (!confirmClose) return;
     }
 
     setTabs(prev => prev.filter(tab => tab.id !== id));
@@ -120,20 +140,20 @@ export function Playground() {
     // if this tab was focused
     // then check whether there are any tabs before or after it
     // if yes then try to focus the before it otherwise after it
-    if(activeTabId === id) {
+    if (activeTabId === id) {
       let index = 0;
 
-      for(let i = 0; i < tabs.length; ++i) {
-        if(activeTabId === tabs[i].id) {
+      for (let i = 0; i < tabs.length; ++i) {
+        if (activeTabId === tabs[i].id) {
           index = i;
 
           break;
         }
       }
 
-      if(index > 0) {
+      if (index > 0) {
         setActiveTabId(tabs[index - 1].id);
-      } else if(index < tabs.length) {
+      } else if (index < tabs.length - 1) {
         setActiveTabId(tabs[index + 1].id);
       } else {
         setActiveTabId(null);
@@ -161,6 +181,21 @@ export function Playground() {
       handleSplitDrag();
     }, 500);
   }, []);
+
+  useEffect(() => {
+    const confirmExit = (e) => {
+      const hasUnsavedChanges = tabs.some(tab => tab.unsaved);
+
+      if (!hasUnsavedChanges) return;
+
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", confirmExit);
+
+    return () => window.removeEventListener("beforeunload", confirmExit);
+  }, [tabs]);
 
   const handleProjectToggle = () => {
     if (!workspaceRootRef.current) return;
@@ -195,119 +230,162 @@ export function Playground() {
     setIsProjectOpen(!isProjectOpen);
   };
 
+  const openConfirmationPopup = () => {
+     if(confirmationPopupRef.current) {
+      confirmationPopupRef.current.setAttribute('style', 'display: flex');
+    }
+  }
+
+  const closeConfirmationPopup = () => {
+    if(confirmationPopupRef.current) {
+      confirmationPopupRef.current.removeAttribute('style');
+    }
+  };
+
   return (
-    <div className={styles.playground_root}>
-      <header className={styles.header_root}>
-        <div className={styles.header_content}>
-          <span className={styles.header_title}>Playground</span>
-        </div>
-      </header>
-
-      <main className={styles.app_root}>
-        <div className={styles.activity_bar_root}>
-          <div className={styles.top_btn_grp}>
-            <button
-              className={`${styles.project_btn} ${isProjectOpen && styles.active}`}
-              onClick={handleProjectToggle}
-              title={isProjectOpen ? "Hide project" : "Show project"}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                width="25px"
-                height="25px"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8.5 0h9L22 4.5v12.068L20.705 18H16v4.568L14.568 24H2.5L1 22.568V7.5L2.5 6H7V1.5zM16 1.5V6h4.5v10.5h-12v-15zm3.879 3L17.5 2.121V4.5zM7 7.5v9.068L8.5 18h6v4.5h-12v-15z"
-                ></path>
-              </svg>
-            </button>
+    <>
+      <div className={styles.playground_root}>
+        <header className={styles.header_root}>
+          <div className={styles.header_content}>
+            <span className={styles.header_title}>Playground</span>
           </div>
-        </div>
+        </header>
 
-        {/*
+        <main className={styles.app_root}>
+          <div className={styles.activity_bar_root}>
+            <div className={styles.top_btn_grp}>
+              <button
+                className={`${styles.project_btn} ${isProjectOpen && styles.active}`}
+                onClick={handleProjectToggle}
+                title={isProjectOpen ? "Hide project" : "Show project"}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  width="25px"
+                  height="25px"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8.5 0h9L22 4.5v12.068L20.705 18H16v4.568L14.568 24H2.5L1 22.568V7.5L2.5 6H7V1.5zM16 1.5V6h4.5v10.5h-12v-15zm3.879 3L17.5 2.121V4.5zM7 7.5v9.068L8.5 18h6v4.5h-12v-15z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/*
           TODO: if user tries to go beyond minSize while closing
           just toggle the sidebar off.
           on second note might not be a good idea tbh
         */}
-        {/*
+          {/*
           TODO: add debouncer or rate-limiter
         */}
-        <Split
-          className={styles.workspace_root}
-          sizes={[20, 80]}
-          minSize={100}
-          expandToMin={false}
-          gutterSize={4}
-          gutterAlign="center"
-          snapOffset={0}
-          dragInterval={0.5}
-          direction="horizontal"
-          cursor="ew-resize"
-          ref={workspaceRootRef}
-          onDrag={handleSplitDrag}
-        >
-          <div
-            className={styles.sidebar_root}
-          >
-            <Explorer
-              projectId={project_id}
-              openFile={openFile}
-            />
-          </div>
           <Split
-            className={styles.workspace_main_root}
-            sizes={[60, 40]}
-            minSize={40}
+            className={styles.workspace_root}
+            sizes={[20, 80]}
+            minSize={100}
             expandToMin={false}
             gutterSize={4}
             gutterAlign="center"
             snapOffset={0}
             dragInterval={0.5}
-            direction="vertical"
-            cursor="ns-resize"
+            direction="horizontal"
+            cursor="ew-resize"
+            ref={workspaceRootRef}
             onDrag={handleSplitDrag}
           >
-            <div className={styles.editor_root}>
-              <EditorActivityBar
-                tabs={tabs}
-                activeTabId={activeTabId}
-                setActiveTabId={setActiveTabId}
-                closeTab={closeTab}
+            <div
+              className={styles.sidebar_root}
+            >
+              <Explorer
+                projectId={project_id}
+                openFile={openFile}
               />
+            </div>
+            <Split
+              className={styles.workspace_main_root}
+              sizes={[60, 40]}
+              minSize={40}
+              expandToMin={false}
+              gutterSize={4}
+              gutterAlign="center"
+              snapOffset={0}
+              dragInterval={0.5}
+              direction="vertical"
+              cursor="ns-resize"
+              onDrag={handleSplitDrag}
+            >
+              <div className={styles.editor_root}>
+                <EditorActivityBar
+                  tabs={tabs}
+                  activeTabId={activeTabId}
+                  setActiveTabId={setActiveTabId}
+                  closeTab={closeTab}
+                />
 
-              <div className={styles.editor_container}>
-                <div className={styles.editor_pane}>
-                  <Editor
-                    tab={activeTab}
-                    updateTabContent={updateTabContent}
-                    saveFile={saveFile}
+                <div className={styles.editor_container}>
+                  <div className={styles.editor_pane}>
+                    <Editor
+                      tab={activeTab}
+                      updateTabContent={updateTabContent}
+                      saveFile={saveFile}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.terminal_root}>
+                <div className={styles.terminal_toolbar}>
+                  <div className={styles.terminal_tabs}>
+                    <button className={`${styles.tab} ${styles.terminal_selected_tab}`}>
+                      Terminal
+                    </button>
+                  </div>
+                </div>
+
+                <div className={styles.terminal_container}>
+                  <XTerminal
+                    terminalRef={termRef}
+                    projectId={project_id}
                   />
                 </div>
               </div>
-            </div>
-
-            <div className={styles.terminal_root}>
-              <div className={styles.terminal_toolbar}>
-                <div className={styles.terminal_tabs}>
-                  <button className={`${styles.tab} ${styles.terminal_selected_tab}`}>
-                    Terminal
-                  </button>
-                </div>
-              </div>
-
-              <div className={styles.terminal_container}>
-                <XTerminal
-                  terminalRef={termRef}
-                  projectId={project_id}
-                />
-              </div>
-            </div>
+            </Split>
           </Split>
-        </Split>
-      </main>
-    </div>
+        </main>
+      </div>
+
+      <div className={styles.confirmation_overlay}
+        onClick={(e) => {
+          if(e.target === e.currentTarget) {
+            closeConfirmationPopup();
+          }
+        }}
+      >
+        <div
+          className={styles.confirmation_popup}
+          ref={confirmationPopupRef}
+        >
+          <div className={styles.confirmation_text}>
+            Do you want to save and backup project before leaving?
+          </div>
+
+          <div className={styles.confirmation_btn_grp}>
+            <button className={styles.confirmation_btn}>
+              Yes
+            </button>
+            <button className={styles.confirmation_btn}>
+              No
+            </button>
+            <button className={styles.confirmation_btn}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

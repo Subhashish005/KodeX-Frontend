@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { useAxiosPrivate } from '../../utils/useAxiosPrivate';
-
 import styles from './EditorActivityBar.module.css';
 
 const EditorTab = ({ tab, active, setActiveTabId, closeTab }) => {
@@ -17,10 +14,10 @@ const EditorTab = ({ tab, active, setActiveTabId, closeTab }) => {
         onClick={(e) => {
           e.stopPropagation();
 
-          closeTab(tab.id)
+          closeTab(tab.id);
         }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon s-ion-icon" viewBox="0 0 512 512" stroke-width="40">
+        <svg xmlns="http://www.w3.org/2000/svg" className="ionicon s-ion-icon" viewBox="0 0 512 512" strokeWidth="40">
           <path strokeLinecap="round" strokeLinejoin="round" d="M256 112v288M400 256H112"></path>
         </svg>
       </span>

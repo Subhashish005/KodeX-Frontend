@@ -54,7 +54,6 @@ export const ProjectsHome = () => {
     }
   }
 
-
   const isBlank = (str) => {
     return (!str || /^\s*$/.test(str));
   };
@@ -237,7 +236,7 @@ export const ProjectsHome = () => {
                 <option value="">Select a language</option>
                 <option value="C++">C++</option>
                 <option value="Java">Java</option>
-                <option value="Python">Python</option>
+                <option value="Go">Go</option>
               </select>
             </div>
           </div>

@@ -184,21 +184,56 @@ export const Explorer = ({ projectId, openFile }) => {
   });
   const treeRef = useRef();
   const axiosPrivateInstance = useAxiosPrivate();
+  // this flag is used to decide whether to poll for folder structure
+  // or not
+  const [hasTempNode, setHasTempNode] = useState(false);
+  const hasTempNodeRef = useRef(hasTempNode);
 
   useEffect(() => {
-    axiosPrivateInstance.get(
-      `/api/v1/projects/${projectId}`
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          setData([res.data]);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, []);
+    hasTempNodeRef.current = hasTempNode;
+  }, [hasTempNode]);
 
+  useEffect(() => {
+    const openProject = async () => {
+      await axiosPrivateInstance.get(
+        `/api/v1/projects/${projectId}`
+      )
+        .then((res) => {
+          if (res.status === 200) {
+            setData([res.data]);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    openProject();
+
+    const fetchProjectStructureData = async () => {
+      console.log(hasTempNodeRef.current);
+
+      await axiosPrivateInstance.get(
+        `/api/v1/projects/${projectId}/structure`
+      )
+        .then((res) => {
+          if (res.status === 200) {
+            setData([res.data]);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    // ask for data every 7 seconds
+    // DON'T DO THIS WHEN THERE IS A TEMP NODE IN TREE
+    // polling for project structure is messing with the
+    // temp node(if present)
+    const intervalId = setInterval(fetchProjectStructureData, 7000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleContextMenu = (e, node) => {
     e.preventDefault();
@@ -227,6 +262,7 @@ export const Explorer = ({ projectId, openFile }) => {
 
     const newData = addChildToData(data, rightClickMenu.node.id, newNode);
     setData(newData);
+    setHasTempNode(true);
 
     // scroll to the newly made temp node for better ux
     treeRef.current.scrollTo(newNode.id);
@@ -277,7 +313,7 @@ export const Explorer = ({ projectId, openFile }) => {
   }
 
   const createNewNode = (node, name) => {
-    if(node.level === 0) return;
+    if (node.level === 0) return;
 
     const subPath = node.data.type === 'FOLDER' ? 'folders' : 'files';
     const hash = node.parent.level === 0 ? null : node.parent.id;
@@ -305,6 +341,9 @@ export const Explorer = ({ projectId, openFile }) => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setHasTempNode(false);
       });
   }
 
@@ -321,6 +360,13 @@ export const Explorer = ({ projectId, openFile }) => {
 
         return node;
       });
+  }
+
+  const removeTempNode = (node) => {
+    const newData = removeNodeFromData(data, node.id);
+
+    setData(newData);
+    setHasTempNode(false);
   }
 
   const handleNodeRemove = (node) => {
@@ -369,7 +415,7 @@ export const Explorer = ({ projectId, openFile }) => {
               {...props}
               onRightClick={(e) => handleContextMenu(e, props.node)}
               createNewNode={createNewNode}
-              removeNode={handleNodeRemove}
+              removeNode={removeTempNode}
               openFile={openFile}
             />
           )}

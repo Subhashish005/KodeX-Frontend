@@ -1,5 +1,7 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { cpp } from '@codemirror/lang-cpp';
+import { java } from '@codemirror/lang-java';
+import { go } from '@codemirror/lang-go';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
 import { keymap } from '@uiw/react-codemirror';
 
@@ -23,7 +25,7 @@ export const Editor = ({tab, updateTabContent, saveFile}) => {
     <CodeMirror
       key={tab.id}
       value={tab.content}
-      extensions={[cpp(), saveKeymap]}
+      extensions={[cpp(), java(), go(), saveKeymap]}
       theme={tokyoNight}
       onChange={(value) => updateTabContent(value)}
       className={styles.editor}
