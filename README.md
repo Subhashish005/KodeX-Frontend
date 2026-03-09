@@ -112,7 +112,7 @@ The frontend interacts with backend APIs that manage file synchronization with t
 
 ```npm run build```
 
-## Related Respository
+## Related Repository
 
 ### Backend repository:
 [KodeX Backend](https://github.com/Subhashish005/KodeX-Backend)
@@ -145,4 +145,5 @@ The frontend interacts with backend APIs that manage file synchronization with t
 ### Playground page:
 
 ![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_playground_page.png?raw=true)
+
 
