@@ -129,18 +129,19 @@ The frontend interacts with backend APIs that manage file synchronization with t
 ## Screenshots
 
 ### Home page:
-![](https://github.com/Subhashish005/KodeX-Frontend/tree/main/public/KodeX_home_page.png?raw=true)
+![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_home_page.png?raw=true)
 
 ### Login/Sign up page:
-![](https://github.com/Subhashish005/KodeX-Frontend/tree/main/public/KodeX_login_page.png?raw=true)
+![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_login_page.png?raw=true)
 
-![](https://github.com/Subhashish005/KodeX-Frontend/tree/main/public/KodeX_signup_page.png?raw=true)
+![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_signup_page.png?raw=true)
 
 ### OAuth Consent page:
-![](https://github.com/Subhashish005/KodeX-Frontend/tree/main/public/KodeX_oauth_disclaimer.png?raw=true)
+![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_oauth_disclaimer.png?raw=true)
 
 ### Projects page:
-![](https://github.com/Subhashish005/KodeX-Frontend/tree/main/public/KodeX_projects_page.png?raw=true)
+![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_projects_page.png?raw=true)
 
 ### Playground page:
-![](https://github.com/Subhashish005/KodeX-Frontend/tree/main/public/KodeX_playground_page.png?raw=true)
+
+![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_playground_page.png?raw=true)
