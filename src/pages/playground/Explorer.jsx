@@ -43,7 +43,11 @@ const NodeRenderer = ({ node, style, dragHandle, onRightClick, createNewNode, re
               name='temp_input'
               onChange={(e) => setName(e.target.value)}
               ref={inputRef}
-              onClick={(e) => e.target.focus()}
+              onClick={(e) => {
+                e.stopPropagation();
+
+                e.target.focus();
+              }}
               onKeyDown={(e) => {
                 e.stopPropagation();
 
@@ -58,6 +62,7 @@ const NodeRenderer = ({ node, style, dragHandle, onRightClick, createNewNode, re
               onBlur={() => {
                 removeNode(node);
               }}
+              autoComplete='off'
             />
           </span>
         </div>
@@ -211,7 +216,8 @@ export const Explorer = ({ projectId, openFile }) => {
     openProject();
 
     const fetchProjectStructureData = async () => {
-      console.log(hasTempNodeRef.current);
+      // if there is temp node in tree don't try refresh
+      if(hasTempNodeRef.current) return;
 
       await axiosPrivateInstance.get(
         `/api/v1/projects/${projectId}/structure`

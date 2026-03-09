@@ -154,6 +154,8 @@
     border-radius: 5px;
     outline: none;
     box-sizing: border-box;
+    background-color: transparent;
+    color: white;
   }
 
 }
