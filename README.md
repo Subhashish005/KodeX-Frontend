@@ -137,7 +137,7 @@ The frontend interacts with backend APIs that manage file synchronization with t
 ![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_signup_page.png?raw=true)
 
 ### OAuth Consent page:
-![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_oauth_disclaimer.png?raw=true)
+![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/Kodex_oauth_disclaimer_page.png?raw=true)
 
 ### Projects page:
 ![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_projects_page.png?raw=true)
@@ -145,3 +145,4 @@ The frontend interacts with backend APIs that manage file synchronization with t
 ### Playground page:
 
 ![](https://github.com/Subhashish005/KodeX-Frontend/blob/main/public/KodeX_playground_page.png?raw=true)
+
